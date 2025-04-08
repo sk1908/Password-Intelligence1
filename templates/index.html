@@ -1,0 +1,495 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h1 class="mb-4">
+            <span class="password-shield"><i class="fas fa-shield-alt me-3"></i></span>
+            PassGuardian: Premium Password Security
+        </h1>
+        <p class="lead">Advanced password analyzer utilizing ML and GenAI to protect your digital identity.</p>
+    </div>
+</div>
+
+<!-- Main Password Analysis Card -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <!-- Feature Badge -->
+            <div class="ribbon">
+                <span>Premium</span>
+            </div>
+            
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">
+                    <i class="fas fa-lock me-2"></i>Analyze Your Password
+                </h2>
+                
+                <!-- Error message -->
+                <div id="error-message" class="alert alert-danger d-none" role="alert"></div>
+                
+                <!-- Password Input Form -->
+                <div class="input-group mb-3 password-input-group">
+                    <input type="password" id="password-input" class="form-control form-control-lg" 
+                           placeholder="Enter your password to analyze" aria-label="Password">
+                    <button class="btn" type="button" id="analyze-btn">
+                        <span id="analyze-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <i class="fas fa-search-shield me-2"></i>Analyze
+                    </button>
+                </div>
+                
+                <!-- Toggle password visibility -->
+                <div class="form-check mb-3 text-center">
+                    <input class="form-check-input" type="checkbox" id="show-password" 
+                           onclick="document.getElementById('password-input').type = this.checked ? 'text' : 'password'">
+                    <label class="form-check-label" for="show-password">
+                        <i class="fas fa-eye me-1"></i> Show password
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Section (Initially Hidden) -->
+<div id="results-section" class="d-none">
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-bar me-2"></i>Analysis Results
+                    </h2>
+                    
+                    <!-- Security Rating Stars -->
+                    <div class="security-rating" id="security-rating">
+                        <span class="rating-star" data-value="1"><i class="fas fa-star"></i></span>
+                        <span class="rating-star" data-value="2"><i class="fas fa-star"></i></span>
+                        <span class="rating-star" data-value="3"><i class="fas fa-star"></i></span>
+                        <span class="rating-star" data-value="4"><i class="fas fa-star"></i></span>
+                        <span class="rating-star" data-value="5"><i class="fas fa-star"></i></span>
+                    </div>
+                    
+                    <!-- Strength Meter -->
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="mb-0">
+                                <i class="fas fa-tachometer-alt me-2"></i>Password Strength
+                            </h5>
+                            <h5 id="strength-label" class="mb-0 badge">N/A</h5>
+                        </div>
+                        <div class="progress strength-meter-container">
+                            <div id="strength-meter" class="progress-bar" role="progressbar" 
+                                 style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <!-- Stats Column -->
+                        <div class="col-md-6">
+                            <div class="card stats-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-stats me-2"></i>Password Statistics
+                                    </h5>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="fas fa-ruler me-2"></i>Length
+                                                <span class="ms-2 text-muted small" data-bs-toggle="tooltip" 
+                                                      title="Longer passwords are generally more secure. We recommend at least 12 characters.">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </span>
+                                            </div>
+                                            <span id="length-value" class="badge rounded-pill">0</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="fas fa-random me-2"></i>Entropy (bits)
+                                                <span class="ms-2 text-muted small" data-bs-toggle="tooltip" 
+                                                      title="Entropy measures randomness. Higher values mean more security (80+ bits is good).">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </span>
+                                            </div>
+                                            <span id="entropy-value" class="badge bg-info rounded-pill">0</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="fas fa-stopwatch me-2"></i>Time to crack
+                                                <span class="ms-2 text-muted small" data-bs-toggle="tooltip" 
+                                                      title="Estimated time for a sophisticated attack to crack your password.">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </span>
+                                            </div>
+                                            <span id="time-to-crack" class="badge bg-warning rounded-pill">Unknown</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>Vulnerability Assessment
+                                    </h5>
+                                    <ul id="patterns-found" class="list-group list-group-flush">
+                                        <li class="list-group-item">No patterns analyzed yet</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Character Distribution Chart -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-chart-pie me-2"></i>Character Distribution
+                                    </h5>
+                                    <div class="chart-container">
+                                        <canvas id="char-distribution"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI-Generated Suggestions -->
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <i class="fas fa-robot me-2"></i>AI-Powered Security Advisor
+                            </h4>
+                            <div id="suggestions" class="mt-3">
+                                <div class="text-center">
+                                    <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_szlepvdh.json"  background="transparent"  speed="1"  style="width: 150px; height: 150px; margin: 0 auto;"  loop  autoplay></lottie-player>
+                                    <p class="mt-2">Our AI security advisor is analyzing your password...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Generate Password Section -->
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">
+                    <i class="fas fa-key me-2"></i>Generate Military-Grade Password
+                </h2>
+                
+                <form id="generate-form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <label for="password-length" class="form-label">
+                                    <i class="fas fa-ruler-horizontal me-2"></i>Password Length
+                                    <span class="ms-2 text-muted small" data-bs-toggle="tooltip" 
+                                          title="Longer passwords provide exponentially more security.">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                </label>
+                                <div class="d-flex align-items-center">
+                                    <input type="range" class="form-range flex-grow-1" id="password-length" 
+                                           min="8" max="32" value="16" 
+                                           oninput="document.getElementById('length-value-display').textContent = this.value">
+                                    <span id="length-value-display" class="range-value ms-2">16</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="min-entropy" class="form-label">
+                                    <i class="fas fa-unlock-alt me-2"></i>Security Level (Entropy)
+                                    <span class="ms-2 text-muted small" data-bs-toggle="tooltip" 
+                                          title="Higher entropy values create more secure passwords. 80+ bits is recommended for most accounts, 100+ for critical accounts.">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                </label>
+                                <div class="d-flex align-items-center">
+                                    <input type="range" class="form-range flex-grow-1" id="min-entropy" 
+                                           min="40" max="128" value="80" 
+                                           oninput="document.getElementById('entropy-value-display').textContent = this.value">
+                                    <span id="entropy-value-display" class="range-value ms-2">80</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card p-3">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-cogs me-2"></i>Character Types
+                                </h5>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="use-uppercase" checked>
+                                    <label class="form-check-label" for="use-uppercase">
+                                        <i class="fas fa-font me-2"></i>Include uppercase letters (A-Z)
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="use-lowercase" checked>
+                                    <label class="form-check-label" for="use-lowercase">
+                                        <i class="fas fa-text-height me-2"></i>Include lowercase letters (a-z)
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="use-numbers" checked>
+                                    <label class="form-check-label" for="use-numbers">
+                                        <i class="fas fa-calculator me-2"></i>Include numbers (0-9)
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="use-symbols" checked>
+                                    <label class="form-check-label" for="use-symbols">
+                                        <i class="fas fa-hashtag me-2"></i>Include symbols (!@#$%^&*)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-lg">
+                            <span id="generate-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            <i class="fas fa-bolt me-2"></i>Generate Secure Password
+                        </button>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <div id="generated-password"></div>
+                        <button id="copy-password" type="button" class="btn btn-outline-light mt-3" disabled>
+                            <i class="fas fa-copy me-1"></i> Copy to Clipboard
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section">
+    <div class="row">
+        <div class="col-md-12 text-center mb-5">
+            <h2><i class="fas fa-star me-2"></i>Premium Features</h2>
+            <p class="lead">Our password security toolkit uses cutting-edge technology to protect your digital identity</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h4 class="mb-3">Advanced AI Analysis</h4>
+                <p class="mb-0">
+                    Uses Large Language Models and machine learning technology trained on data breaches to identify vulnerabilities before hackers do.
+                </p>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-virus"></i>
+                </div>
+                <h4 class="mb-3">Real-time Threat Detection</h4>
+                <p class="mb-0">
+                    Checks passwords against sophisticated attack methods, calculating precise time-to-crack estimates based on current hardware.
+                </p>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-magic"></i>
+                </div>
+                <h4 class="mb-3">Intelligent Password Creation</h4>
+                <p class="mb-0">
+                    Generates highly secure yet memorable passwords with perfect balance of strength and usability for different security needs.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Testimonials Section -->
+<div class="row mt-5 mb-5">
+    <div class="col-md-12 text-center mb-4">
+        <h2><i class="fas fa-quote-left me-2"></i>Security Expert Approved</h2>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between mb-3">
+                <div>
+                    <h5 class="mb-1">Security Magazine</h5>
+                    <div>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                </div>
+                <i class="fas fa-quote-right fa-2x opacity-25"></i>
+            </div>
+            <p class="mb-0">"The most sophisticated password analysis tool we've tested. The AI recommendations are remarkably insightful."</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between mb-3">
+                <div>
+                    <h5 class="mb-1">Cybersecurity Today</h5>
+                    <div>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                </div>
+                <i class="fas fa-quote-right fa-2x opacity-25"></i>
+            </div>
+            <p class="mb-0">"A game-changer for personal security. The ML-based evaluation offers insights that traditional analyzers simply can't match."</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between mb-3">
+                <div>
+                    <h5 class="mb-1">Tech Innovations</h5>
+                    <div>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star-half-alt text-warning"></i>
+                    </div>
+                </div>
+                <i class="fas fa-quote-right fa-2x opacity-25"></i>
+            </div>
+            <p class="mb-0">"The perfect balance of advanced security analysis and user-friendly design. A top-rated choice for password security."</p>
+        </div>
+    </div>
+</div>
+
+<!-- Celebration Confetti Script -->
+<script>
+    // Function to trigger confetti for strong passwords
+    function triggerCelebration() {
+        const confettiCanvas = document.getElementById('confetti-container');
+        
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+        
+        // Fire again after a delay for more effect
+        setTimeout(() => {
+            confetti({
+                particleCount: 50,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 }
+            });
+        }, 250);
+        
+        setTimeout(() => {
+            confetti({
+                particleCount: 50,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 }
+            });
+        }, 400);
+    }
+    
+    // Initialize the security rating stars
+    function initRatingStars() {
+        // This function will be called when results are displayed
+        const stars = document.querySelectorAll('.rating-star');
+        const strengthMeter = document.getElementById('strength-meter');
+        
+        // When strength value changes, update stars
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === 'style') {
+                    const strengthWidth = parseInt(strengthMeter.style.width);
+                    updateStars(strengthWidth);
+                }
+            });
+        });
+        
+        observer.observe(strengthMeter, { attributes: true });
+        
+        function updateStars(strength) {
+            let rating = 1;
+            
+            if (strength >= 20) rating = 2;
+            if (strength >= 40) rating = 3;
+            if (strength >= 60) rating = 4;
+            if (strength >= 80) rating = 5;
+            
+            stars.forEach(star => {
+                const value = parseInt(star.getAttribute('data-value'));
+                if (value <= rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+            
+            // Trigger confetti for strong passwords (4-5 stars)
+            if (rating >= 4 && strength >= 75) {
+                triggerCelebration();
+            }
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Setup copy button for generated password
+        const generatedPassword = document.getElementById('generated-password');
+        const copyButton = document.getElementById('copy-password');
+        
+        // Monitor changes to the generated password content
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    copyButton.disabled = !generatedPassword.textContent.trim();
+                }
+            });
+        });
+        
+        observer.observe(generatedPassword, { childList: true });
+        
+        // Initialize rating stars when results are shown
+        const resultsSection = document.getElementById('results-section');
+        if (resultsSection) {
+            // Watch for when results section becomes visible
+            const resultsObserver = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.attributeName === 'class' && 
+                        !resultsSection.classList.contains('d-none')) {
+                        initRatingStars();
+                        resultsObserver.disconnect(); // Only need to initialize once
+                    }
+                });
+            });
+            
+            resultsObserver.observe(resultsSection, { attributes: true });
+        }
+    });
+</script>
+{% endblock %}

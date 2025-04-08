@@ -1,0 +1,481 @@
+/* Modern Award-Winning UI for Password Strength Analyzer */
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #6e8efb, #a777e3);
+    --secondary-gradient: linear-gradient(135deg, #42e695, #3bb2b8);
+    --danger-gradient: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    --warning-gradient: linear-gradient(135deg, #f7b733, #fc4a1a);
+    --success-gradient: linear-gradient(135deg, #32be8f, #38ef7d);
+    --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --card-border-radius: 16px;
+    --input-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --glow-effect: 0 0 20px rgba(110, 142, 251, 0.4);
+}
+
+body {
+    padding-top: 30px;
+    padding-bottom: 60px;
+    background-color: #121212;
+    background-image: radial-gradient(circle at 20% 35%, rgba(110, 142, 251, 0.1) 0%, transparent 50%), 
+                      radial-gradient(circle at 75% 70%, rgba(167, 119, 227, 0.1) 0%, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+/* Header Styles */
+.navbar {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(20, 20, 20, 0.8) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Input Styles */
+.password-input-group {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#password-input {
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    border: none;
+    padding: 18px 25px;
+    border-radius: 12px;
+    background-color: rgba(40, 40, 40, 0.8);
+    box-shadow: var(--input-shadow);
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+#password-input:focus {
+    box-shadow: var(--glow-effect);
+    background-color: rgba(50, 50, 50, 0.8);
+}
+
+#analyze-btn {
+    border: none;
+    border-radius: 12px;
+    padding: 0 30px;
+    background-image: var(--primary-gradient);
+    box-shadow: 0 4px 15px rgba(110, 142, 251, 0.3);
+    transition: all 0.3s ease;
+}
+
+#analyze-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(110, 142, 251, 0.5);
+}
+
+/* Strength Meter Styles */
+.strength-meter-container {
+    height: 16px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    background-color: rgba(40, 40, 40, 0.5);
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.progress-bar {
+    transition: width 1s cubic-bezier(0.19, 1, 0.22, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(255, 255, 255, 0.2) 50%, 
+        rgba(255, 255, 255, 0) 100%);
+    animation: shimmer 2s infinite;
+    transform: translateX(-100%);
+}
+
+@keyframes shimmer {
+    100% { transform: translateX(100%); }
+}
+
+.progress-bar.bg-danger {
+    background-image: var(--danger-gradient);
+}
+
+.progress-bar.bg-warning {
+    background-image: var(--warning-gradient);
+}
+
+.progress-bar.bg-success {
+    background-image: var(--success-gradient);
+}
+
+/* Award Badge */
+.award-badge {
+    position: absolute;
+    top: -20px;
+    right: 0;
+    z-index: 10;
+    transform: rotate(10deg);
+    transition: all 0.3s ease;
+}
+
+.award-badge:hover {
+    transform: rotate(0deg) scale(1.1);
+}
+
+.award-badge-text {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Card Styles */
+.card {
+    border: none;
+    border-radius: var(--card-border-radius);
+    background-color: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 30px;
+    overflow: hidden;
+    transform: translateZ(0);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 25px;
+}
+
+.card-title {
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+}
+
+.card-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 40px;
+    height: 3px;
+    background-image: var(--primary-gradient);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.card:hover .card-title::after {
+    width: 60px;
+}
+
+/* Results Section */
+.results-card {
+    margin-top: 40px;
+}
+
+.stats-card {
+    margin-bottom: 30px;
+}
+
+.password-suggestions {
+    margin-top: 30px;
+}
+
+.list-group {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.list-group-item {
+    background-color: rgba(40, 40, 40, 0.7);
+    border-color: rgba(255, 255, 255, 0.05);
+    padding: 15px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: rgba(50, 50, 50, 0.7);
+}
+
+/* Badges */
+.badge {
+    padding: 8px 12px;
+    font-weight: 600;
+    border-radius: 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.badge.bg-primary {
+    background-image: var(--primary-gradient) !important;
+}
+
+.badge.bg-info {
+    background-image: linear-gradient(135deg, #2fd8f7, #60cbe5) !important;
+}
+
+.badge.bg-warning {
+    background-image: var(--warning-gradient) !important;
+}
+
+/* Tooltip Styles */
+.tooltip {
+    opacity: 1;
+}
+
+.tooltip .tooltip-inner {
+    background-color: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.9rem;
+    max-width: 300px;
+}
+
+/* Chart Styles */
+.chart-container {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* Generated Password */
+#generated-password {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    word-break: break-all;
+    padding: 15px 20px;
+    background-color: rgba(50, 190, 143, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(50, 190, 143, 0.2);
+    margin: 20px 0;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+#generated-password:hover {
+    background-color: rgba(50, 190, 143, 0.15);
+    border-color: rgba(50, 190, 143, 0.3);
+}
+
+/* Feature Cards */
+.features-section {
+    margin-top: 70px;
+    margin-bottom: 50px;
+}
+
+.feature-card {
+    height: 100%;
+    padding: 30px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background-color: rgba(25, 25, 25, 0.8);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    background-color: rgba(35, 35, 35, 0.8);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 25px;
+    display: inline-block;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Footer Styles */
+footer {
+    margin-top: 80px;
+    padding: 30px 0;
+    font-size: 0.9rem;
+    background-color: rgba(15, 15, 15, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Range input styling */
+.range-value {
+    display: inline-block;
+    width: 40px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.form-range {
+    height: 6px;
+    border-radius: 3px;
+}
+
+.form-range::-webkit-slider-thumb {
+    background: var(--primary-gradient);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Password Security Rating */
+.security-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.rating-star {
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.2);
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.rating-star.active {
+    color: gold;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Animation for copied text */
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.copy-feedback {
+    animation: fadeInOut 2s;
+}
+
+/* Password Shield Animation */
+@keyframes shieldPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.password-shield {
+    animation: shieldPulse 3s infinite;
+}
+
+/* Confetti Animation for High Scores */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .chart-container {
+        max-width: 300px;
+    }
+    
+    .award-badge {
+        transform: scale(0.8) rotate(10deg);
+    }
+    
+    #password-input {
+        padding: 12px 15px;
+    }
+    
+    .card-body {
+        padding: 20px;
+    }
+}
+
+/* Award ribbon design */
+.ribbon {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    z-index: 1;
+    overflow: hidden;
+    width: 75px;
+    height: 75px;
+    text-align: right;
+}
+
+.ribbon span {
+    font-size: 10px;
+    font-weight: bold;
+    color: #FFF;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 20px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    width: 100px;
+    display: block;
+    background: var(--primary-gradient);
+    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 19px;
+    right: -21px;
+}
+
+.ribbon span::before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 100%;
+    z-index: -1;
+    border-left: 3px solid #8F6BB3;
+    border-right: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid #8F6BB3;
+}
+
+.ribbon span::after {
+    content: "";
+    position: absolute;
+    right: 0px;
+    top: 100%;
+    z-index: -1;
+    border-left: 3px solid transparent;
+    border-right: 3px solid #5F7ED7;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid #5F7ED7;
+}
+
+/* Badge animation */
+@keyframes badgePulse {
+    0% { transform: scale(1) rotate(45deg); }
+    50% { transform: scale(1.05) rotate(45deg); }
+    100% { transform: scale(1) rotate(45deg); }
+}
+
+.ribbon span {
+    animation: badgePulse 2s infinite;
+}

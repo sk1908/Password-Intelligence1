@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h1 class="mb-4">About Password Strength Analyzer</h1>
+        <p class="lead">Understanding how we analyze and improve your password security</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card bg-dark">
+            <div class="card-body about-section">
+                <h2 class="card-title mb-4">How It Works</h2>
+                
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h4><i class="fas fa-brain me-2"></i>Machine Learning Analysis</h4>
+                        <p>
+                            Our analyzer uses a machine learning model trained on the RockYou dataset - one of the largest 
+                            collections of leaked passwords. This enables our system to recognize patterns that humans might miss
+                            and identify passwords that are similar to commonly used ones.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h4><i class="fas fa-calculator me-2"></i>Entropy Calculation</h4>
+                        <p>
+                            Entropy measures the unpredictability or randomness of your password. A higher entropy means your
+                            password is more random and thus harder to guess. We calculate entropy based on:
+                        </p>
+                        <ul>
+                            <li>The length of your password</li>
+                            <li>The variety of character types used (lowercase, uppercase, numbers, symbols)</li>
+                            <li>The presence of patterns or common sequences</li>
+                            <li>The distribution of characters</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h4><i class="fas fa-stopwatch me-2"></i>Time-to-Crack Estimation</h4>
+                        <p>
+                            We estimate how long it would take for a modern attacker to crack your password using:
+                        </p>
+                        <ul>
+                            <li>Brute force attacks (trying every possible combination)</li>
+                            <li>Dictionary attacks (using common words and variations)</li>
+                            <li>Modern hardware capabilities (assuming 10 billion guesses per second)</li>
+                        </ul>
+                        <p>
+                            This estimation helps you understand the practical security of your password in real-world scenarios.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h4><i class="fas fa-robot me-2"></i>AI-Powered Suggestions</h4>
+                        <p>
+                            Our system uses advanced natural language processing to generate personalized suggestions 
+                            for improving your password. The suggestions aim to:
+                        </p>
+                        <ul>
+                            <li>Maintain some recognizable elements from your original password</li>
+                            <li>Significantly increase security through strategic modifications</li>
+                            <li>Keep the password somewhat memorable</li>
+                            <li>Provide detailed reasoning for the suggested improvements</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h4><i class="fas fa-shield-alt me-2"></i>Privacy and Security</h4>
+                        <p>
+                            We take your privacy seriously:
+                        </p>
+                        <ul>
+                            <li>All password analysis happens locally in your browser</li>
+                            <li>We don't store your passwords</li>
+                            <li>Passwords are only sent to our server for analysis and are not logged or saved</li>
+                            <li>We use secure HTTPS connections to protect your data in transit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card bg-dark">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Password Security Best Practices</h2>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Do:</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Use different passwords for different accounts</li>
+                            <li class="list-group-item">Make passwords at least 12 characters long</li>
+                            <li class="list-group-item">Use a mix of character types (uppercase, lowercase, numbers, symbols)</li>
+                            <li class="list-group-item">Consider using a password manager</li>
+                            <li class="list-group-item">Enable two-factor authentication when available</li>
+                            <li class="list-group-item">Change passwords regularly, especially for sensitive accounts</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h4>Don't:</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Use personal information (birthdays, names, etc.)</li>
+                            <li class="list-group-item">Use common words or patterns (password123, qwerty)</li>
+                            <li class="list-group-item">Share your passwords with others</li>
+                            <li class="list-group-item">Write passwords down on paper or in unsecured digital files</li>
+                            <li class="list-group-item">Use the same password across multiple sites</li>
+                            <li class="list-group-item">Include sequential numbers or letters (123, abc)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4 mb-5">
+    <div class="col-md-12 text-center">
+        <a href="/" class="btn btn-primary btn-lg">
+            <i class="fas fa-arrow-left me-2"></i>Back to Analyzer
+        </a>
+    </div>
+</div>
+{% endblock %}
