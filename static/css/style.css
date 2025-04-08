@@ -26,7 +26,7 @@ body {
 .navbar {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    background-color: rgba(20, 20, 20, 0.8) !important;
+    background-color: rgba(40, 40, 40, 0.8) !important;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
